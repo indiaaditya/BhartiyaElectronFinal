@@ -1,0 +1,965 @@
+body,
+html {
+  	overflow: hidden !important;
+    background-color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    font-size: 17px!important;
+    font-family: Roboto, sans-serif!important;
+    color: #4e4e4e!important;
+}
+
+ul, h1 {
+    cursor: default;
+}
+
+li {
+    cursor: pointer;
+}
+
+dl {
+    font-size: 45px!important;
+    font-family: Roboto, sans-serif!important;
+    color: #4e4e4e!important;
+}
+
+.logo{
+  width: 100%;
+
+}
+
+
+.form-group{
+  margin-bottom: 1em;
+  transform: translate(1em,1.25em);
+  transform-origin: 0 0;
+  transition:all .3s;
+}
+
+.form-label{
+  font-size: 1em;
+  color: #4e4e4e;
+  display: block;
+  opacity: 1;
+  transform: translate(2.2em,-1.25em);
+  transform-origin: 0 0;
+  transition:all .6s;
+}
+
+.form-control,.form-pgmdCycle,.form-control2{
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 2px;
+  border-color: #ccc;
+  border-style: none none solid none;
+  width: 15%;
+  transform: translateX(1.0em);
+  transition: all .5s;
+  padding: 5px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+
+}
+
+.form-control2,.dateCntl{
+  transform: translateX(1em);
+}
+
+.form-pgmdCycle{
+  transform: translateX(-1.0em);
+}
+
+.form-control::placeholder, .form-control2::placeholder, .dateCntl::placeholder {
+  color: transparent;
+}
+
+.form-control:focus,.form-control2:focus,.dateCntl:focus {
+  box-shadow: none;
+  outline: none;
+  border-color: #4e4e4e;
+}
+
+.form-control:focus + .form-label,
+.form-control2:focus + .form-label,
+.dateCntl:focus + .form-label,
+.form-control:not(:placeholder-shown) + .form-label,
+.form-control2:not(:placeholder-shown) + .form-label,
+.dateCntl:not(:placeholder-shown) + .form-label
+
+{
+  transform: translate(1.25em,-4.5em) scale(1);
+}
+
+
+/* refer source: https://www.w3schools.com/howto/howto_css_round_buttons.asp */
+
+.button {
+  /*background-color: #4e4e4e;*/
+  border: none;
+  color: #ccc;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+
+.buttonAcceptParam,.buttonAcceptParam2,.buttonAcceptRotation,.buttonAcceptTorque{
+  border-radius: 50%;
+  color: #4e4e4e;
+  background-color:  rgb(208, 223, 92);
+  font-size: 18px;
+
+
+}
+
+
+.buttonAcceptParam{
+  transform: translate(22em,-3em) scale(1);
+}
+
+.buttonRestoreAcceptParam{
+  transform: translate(-22em,3em) scale(1);
+}
+
+
+.buttonAcceptRotation{
+  transform: translate(22em,-3em) scale(1);
+}
+
+.buttonAcceptTorque{
+  transform: translate(22em,-3em) scale(1);
+}
+
+.buttonAcceptParam2{
+  transform: translate(22em,-3em) scale(1);
+}
+
+.translateDivPgmdCycle{
+  transform: translateY(-5.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateDegreeOfRtn{
+  transform: translateY(-11.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateDivTorque{
+  transform: translateY(-17em) scale(1);
+  transition: all .3s;
+}
+
+.translateDivMaxTorque{
+  transform: translateY(-23em) scale(1);
+  transition: all .3s;
+}
+
+.translateTestName{
+  transform: translateY(-28.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateTestConductor{
+  transform: translateY(-34em) scale(1);
+  transition: all .3s;
+}
+
+.translateEditTestParams{
+  transform: translateY(-57em) scale(1);
+  transition: all .3s;
+}
+
+
+.translateAccTestPressure{
+  transform: translateY(5.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateAccPgmdCycle{
+  transform: translateY(-5.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateAccDegreeOfRtn{
+  transform: translateY(-11em) scale(1);
+  transition: all .3s;
+}
+
+.translateAccTorque{
+  transform: translateY(-16.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateAccMaxTorque{
+  transform: translateY(-22em) scale(1);
+  transition: all .3s;
+}
+
+.translateAccTestName{
+  transform: translateY(-27.5em) scale(1);
+  transition: all .3s;
+}
+
+.translateAccTestConductor{
+  transform: translateY(-33em) scale(1);
+  transition: all .3s;
+}
+
+.translateSliderTestPressure{
+  transform: translate(2em,-70em) scale(1);
+  transition: all .3s;
+}
+
+.translateSliderPgmdCycle{
+  transform: translate(2em,-71em) scale(1);
+  transition: all .3s;
+}
+
+.translateSliderDegreeOfRtn{
+  transform: translate(2em,-72em) scale(1);
+  transition: all .3s;
+}
+
+.translateSliderTorque{
+  transform: translate(2em,-73em) scale(1);
+  transition: all .3s;
+}
+
+.translateSliderMaxTorque{
+  transform: translate(2em,-74em) scale(1);
+  transition: all .3s;
+}
+
+
+
+.smallLabel{
+  width: 100%;
+  font-size: 2em;
+  color: rgb(208, 223, 92);
+  cursor: pointer;
+}
+
+.DivTestPressure,.DivPgmdCycle,.DivDegreeOfRtn,.DivTorque,.DivMaxTorque,.DivTestName,.DivTestConductor{
+  position: absolute;
+  bottom: 120px;
+  height: 50px;
+  width: 500px;
+  background-image: url("img/LabelBkGndSmall.jpg");
+  cursor: pointer;
+
+}
+
+.DivFreshTest,.DivPreviousTest,.DivGenRpt,.DivModSetting{
+  position: absolute;
+  bottom: 480px;
+  height: 45px;
+  width: 500px;
+  left: 20px;
+  background-image: url("img/LabelBkGndSmall.jpg");
+  cursor: pointer;
+}
+
+.DivPreviousTest{
+  bottom: 430px;
+}
+.DivGenRpt{
+  bottom: 380px;
+}
+.DivModSetting{
+  bottom: 330px;
+}
+
+.divFreshTestLblHide,.divPrevTestLblHide,.divGenRptLblHide,.divLblModSettingLblHide{
+  visibility: hidden;
+  position: fixed;
+  left: 10px;
+  bottom: 50px;
+}
+
+
+
+.DivFreshTest:hover,.DivPreviousTest:hover,.DivGenRpt:hover,.DivModSetting:hover,.DivTestPressure:hover,.DivPgmdCycle:hover,.DivDegreeOfRtn:hover,.DivTorque:hover,.DivMaxTorque:hover,.DivTestName:hover,.DivTestConductor:hover{
+  border: 3px solid rgb(208, 223, 92);
+}
+
+.DivPgmdCycle{
+ left: 440px;
+}
+
+.DivDegreeOfRtn{
+  left: 980px;
+}
+
+.DivTorque, .DivMaxTorque{
+  bottom: 65px;
+}
+
+.DivTorque{
+  left: 0px;
+}
+.DivMaxTorque{
+  left: 620px;
+}
+
+.DivTestName, .DivTestConductor{
+  bottom: 10px;
+}
+
+.DivTestName{
+  left: 0px;
+}
+.DivTestConductor{
+  left: 620px;
+}
+
+.translateLblTestPressure{
+  transform: translate(40em,-34em) scale(1);
+  transition: all .6s;
+}
+
+.translateLblPgmdCycle{
+  transform: translate(14.12em,-31.05em) scale(1);
+  transition: all .6s;
+}
+
+.translateLblDegreeOfRtn{
+  transform: translate(-17.65em,-28.18em) scale(1);
+  transition: all .6s;
+}
+
+.translateLblDivTorque{
+  transform: translate(40em,-28.47em) scale(1);
+  transition: all .6s;
+}
+
+.translateLblDivMaxTorque{
+  transform: translate(3.51em,-25.6em) scale(1);
+  transition: all .6s;
+}
+
+.translateLblTestName{
+  transform: translate(39.99em,-25.93em) scale(1);
+  transition: all .6s;
+}
+
+.translateLblTestConductor{
+  transform: translate(3.5em,-23em) scale(1);
+  transition: all .6s;
+}
+
+.btnSubmit{
+  position: fixed;
+  bottom: 0;
+  left: 10px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+
+.btnBack{
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  font-size: 20px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+
+.btnSubmit:hover, .btnBack:hover, .rnBtnPause:hover,.rnBtnStop:hover,.rnBtnResumeNow:hover,.rnBtnResumeLater:hover, .rnBtnStart:hover,.ptBtnMarkAsComplete:hover,.ptBtnResumeSelectedTest:hover,.rptBtnGenRpt:hover,.rptListByTestName:hover,.rptListByConductor:hover,.rptListByDate:hover{
+  background-color: rgb(208, 223, 92);
+  transform: scale(1.1);
+  transition: all .6s;
+  border-radius: 15px;   
+}
+
+
+.translateDivTestPrDesc{
+  transform: translate(2em,-18em);
+  transition: all .6s;
+}
+.translateDivPgmdCyclesDesc{
+  transform: translate(2em,-23.3em);
+  transition: all .6s;
+}
+.translateDivPgmdDegOfRtn{
+  transform: translate(2em,-28.8em);
+  transition: all .6s;
+}
+.translateDivPgmdTq{
+  transform: translate(2em,-34.1em);
+  transition: all .6s;
+}
+.translateDivMaxPgmdTq{
+  transform: translate(2em,-39.4em);
+  transition: all .6s;
+}
+.translateDivTestName{
+  transform: translate(2em,-44.7em);
+  transition: all .6s;
+}
+.translateDivTestCond{
+  transform: translate(2em,-50em);
+  transition: all .6s;
+}
+
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 350px; /* Full-width */
+  height: 10px; /* Specified height */
+  border-radius: 5px;   
+  background: rgb(208, 223, 92);
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+
+/* Slider data source: https://www.w3schools.com/howto/howto_js_rangeslider.asp*/
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  border-radius: 50%; 
+  background: #4e4e4e!important; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  border-radius: 5px;   
+  background: #4e4e4e!important; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* Classes for test run */
+.rnTestParamsDiv,.rnTestStatusDiv,.rnSolenoidStatDiv,.rnTestStageDiv,.rnOutletPrGgDiv,.rnInletPrGgDiv,.rnOutletPrGgDiv,.rnTorqueGgDiv,.rnInletPrGraphDiv,.rnOutletPrGraphDiv,.rnTqGraphDiv{
+  font-size: 26px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+  position: fixed;
+  /*outline: 2px dashed blue;*/
+}
+
+.rnTestParamsDiv,.rnTestStatusDiv,.rnSolenoidStatDiv,.rnTestStageDiv{
+  outline: 4px solid rgb(208, 223, 92);
+  border-radius: 15px;
+}
+
+.rnTestParamsDiv{
+  top: 30%;
+  left: 1%;
+  width: 400px;
+  height: 140px;
+
+}
+.rnTestStatusDiv{
+  top: 45%;
+  left: 1%;
+  width: 400px;
+  height: 140px;
+}
+.rnSolenoidStatDiv{
+  top: 60%;
+  left: 1%;
+  width: 400px;
+  height: 140px;
+}
+.rnTestStageDiv{
+  top: 75%;
+  left: 1%;
+  width: 400px;
+  height: 140px;
+}
+.rnOutletPrGgDiv{
+  top: 25%;
+  left: 35%;
+  width: 400px;
+  height: 240px;
+}
+.rnInletPrGgDiv{
+  top: 50%;
+  left: 30%;
+  width: 250px;
+  height: 200px;
+}
+.rnTorqueGgDiv{
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  height: 200px;
+}
+
+.rnInletPrGraphCV,.rnOutletPrGraphCV,.rnTorqueGraphCV{
+  width: 100%;
+  height: 100%;
+  /*border: 1px solid;*/
+
+}
+
+.rnInletPrGraphDiv{
+  top: 25%;
+  right: 1%;
+  width: 500px;
+  height: 200px;
+}
+
+.rnOutletPrGraphDiv{
+  top: 50%;
+  right: 1%;
+  width: 500px;
+  height: 200px;
+}
+.rnTqGraphDiv{
+  top: 75%;
+  right: 1%;
+  width: 500px;
+  height: 200px;
+}
+
+.rnCVSoutletGauge{
+  position: absolute;
+  width:100%;
+  height: 90%;
+}
+
+.rnCVSInletGauge{
+  position: absolute;
+  width:100%;
+  height: 90%;
+}
+
+.rnCVSTorqueGauge{
+  position: absolute;
+  width:100%;
+  height: 90%;
+}
+
+
+.rnSpanOutletGauge{
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  font: 30px Roboto, sans-serif;
+}
+
+.rnSpanInletGauge{
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  font: 20px Roboto, sans-serif;
+}
+
+.rnSpanTorqueGauge{
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  font: 25px Roboto, sans-serif;
+
+}
+
+.rnTestParamsDivVals{
+  font: 22px Roboto, sans-serif;
+}
+
+.rnCVSCyclesGauge{
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width:50%;
+  height: 100%;
+  /*border: 1px solid blue;*/
+}
+
+.rnSpanCycles{
+  position: absolute;
+  bottom: 0px;
+  left: 74px;
+}
+
+.rnBtnStart{
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+
+.rnBtnPause, .rnBtnResumeNow{
+  position: absolute;
+  left: 30%;
+  bottom: 0px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+.rnBtnStop,.rnBtnResumeLater{
+  position: absolute;
+  left: 60%;
+  bottom: 0px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+.rnBtnResumeNow{
+  position: absolute;
+  bottom: 0px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+.rnBtnResumeLater{
+  position: absolute;
+  bottom: 0px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+}
+
+.rnDivTestCyclDetails{
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  width:50%;
+  top: 0px;
+  font-size: 20px!important;
+  font-family: Roboto, sans-serif!important;
+  /*border: 1px solid yellowgreen;*/
+}
+
+.rnDivCurrCycTime,.rnDivAvgCycTime,.rnDivTotTestTime{
+  background: rgb(208, 223, 92);
+  width: 60%;
+}
+
+.rnDivIsoVlvLbl,.rnDivOtltVlvLbl,.rnDivXhaustVlvLbl{
+  position: absolute;
+  font-size: 20px!important;
+  font-family: Roboto, sans-serif!important;
+  margin-bottom:10px;
+  left: 10px;
+}
+
+.rnDivIsoVlvLbl{
+  top: 20%;
+}
+.rnDivOtltVlvLbl{
+  top: 50%;
+}
+.rnDivXhaustVlvLbl{
+  top: 80%;
+}
+
+.rnDivIsoValvStat,.rnDivOtltValvStat,.rnDivXhaustValvStat,.rnDivIsoValvStatON,.rnDivOtltValvStatON,.rnDivXhaustValvStatON{
+  position: absolute;
+  border: 2px solid #4e4e4e!important;
+  width: 120px;
+  left: 60%;
+  height: 15%;
+  border-radius: 15px;
+}
+
+.rnDivIsoValvStat,.rnDivOtltValvStat,.rnDivXhaustValvStat{
+  background-color: #4e4e4e!important;
+}
+
+.rnDivIsoValvStat,.rnDivIsoValvStatON{
+  top: 20%;
+}
+
+.rnDivOtltValvStat,.rnDivOtltValvStatON{
+  top: 50%;
+
+}
+.rnDivXhaustValvStat,.rnDivXhaustValvStatON{
+  top: 80%;
+}
+.rnDivIsoValvStatON,.rnDivOtltValvStatON,.rnDivXhaustValvStatON{
+  background-color: rgb(208, 223, 92);
+}
+.rnTestStatusContents{
+  position: absolute;
+  top: 50%;
+  left: 10px;
+}
+
+.rnPgmdTestPressure,.rnPgmdCycles,.rnPgmdRtn,.rnPgmdTq{
+  position: absolute;
+  left: 10px;
+}
+
+.rnPgmdTestPressure{
+  top: 20%;
+}
+
+.rnPgmdCycles{
+  top:40%;
+}
+.rnPgmdRtn{
+  top:60%;
+}
+.rnPgmdTq{
+  top:80%
+}
+
+.rnTestParamHeader,.rnTestStatusHeader,.rnSolStatHeader,.rnTestStageHeader{
+  position: absolute;
+  top: 0%;
+  left: 10px;
+}
+
+/*
+.tsMotorSpeed,.tsMotorSpeedHeader,.tsSpeedHeaderInput,.slidecontainer,.tsCCCOPMI,.tsCCDOPMI,.tsOCPMI{
+  outline: 2px solid blue;
+}*/
+
+.tsMotorSpeed,.tsCCCOPMI,.tsCCDOPMI,.tsOCPMI{
+  position: absolute;
+  margin-bottom:50px;
+}
+
+.tsCCCOPMI{
+  top: 44%;
+}
+
+.tsCCDOPMI{
+  top: 58%;
+}
+
+.tsOCPMI{
+  top: 72%;
+}
+
+
+
+.tsMotorSpeed,.tsCCCOPMI,.tsCCDOPMI,.tsOCPMI{
+  height: 100px;
+  width: 700px;
+  left: 10px;
+}
+
+
+
+.tsMotorSpeedHeader,.tsCCCOPMIHeader,.tsCCDOPMIHeader,.tsOCPMIHeader{
+  top: 0px;
+  left: 10px;
+}
+
+
+
+
+.tsSpeedHeaderInput,.tsCCCOPMIInput,.tsCCDOPMIInput,.tsOCPMIInput{
+  /*position: absolute;*/
+  font-size: 30px!important;
+  font-family: Roboto, sans-serif!important;
+  margin-bottom:10px; 
+}
+
+.ptBtnMarkAsComplete,.ptBtnResumeSelectedTest,.rptBtnGenRpt{
+  position: absolute;
+  bottom: 0px;
+  font-size: 35px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer; 
+}
+
+
+.rptListByTestName,.rptListByConductor,.rptListByDate{
+  position: absolute;
+  font-size: 25px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer;
+  top: 30%;
+  font-size: 25px!important; 
+}
+
+
+
+.rptListByTestName{
+  left: 4%;
+}
+.rptListByConductor{
+  left: 40%;
+}
+.rptListByDate{
+  left: 70%;
+}
+
+.ptBtnMarkAsComplete,.rptBtnGenRpt{
+  left: 4%;
+}
+
+.ptBtnResumeSelectedTest{
+  left: 40%;
+}
+
+.ptTblPrevTest{
+  outline: 5px solid rgb(208, 223, 92);
+  position: absolute;
+  top: 35%;
+  left: 5%;
+  font-size: 30px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+  cursor: pointer; 
+  /*height: ;*/
+}
+
+table{
+  display: block; 
+  height: 400px;
+  overflow-y: scroll;
+}
+
+table tbody tr:hover{
+  background-color: #4e4e4e!important;
+  color: rgb(208, 223, 92);
+}
+
+th{
+  background-color: rgb(208, 223, 92);
+  position: sticky;
+  top: 0;
+}
+
+th,td{
+  text-align: center;
+}
+
+tbody { height:10em;  overflow:scroll;}
+
+.ptDivTbl{
+  height: 200px;
+  max-height: 300px;
+  table-layout: fixed;
+}
+.ptTblHeaderDate,.ptTblDataDate{
+  width: 200px;
+}
+.ptTableHeaderTstName,.ptTblDataName{
+  width: 300px;
+}
+.ptTableHeaderTstCond,.ptTblDataCond{
+  width: 350px;
+}
+.ptSelectedTest{
+  background-color: #4e4e4e!important;
+  color: rgb(208, 223, 92);
+  position:absolute;
+  width: 400px;
+  height: 120px;
+  left: 80%;
+  bottom: 5%;
+}
+
+.ptSelectedTestItems{
+  color: #4e4e4e!important;
+  background-color: rgb(208, 223, 92);
+}
+
+
+.rptTranslateDivIDTestName{
+  transform: translate(34em,-7.65em);
+  transition: all .6s;
+}
+
+.rptTranslateDivIDTestCond{
+  transform: translate(34em,-13.5em);
+  transition: all .6s;
+}
+
+.rptTranslateDivIDStartDate{
+  transform: translate(34em,-19.3em);
+  transition: all .6s;
+}
+
+.rptTranslateDivIDEndtDate{
+  transform: translate(34em,-25.5em);
+  transition: all .6s;
+}
+
+.refDelme{
+  outline: 2px solid blue;
+  position: absolute;
+  top: 38%;
+  left:40%;
+  width: 100px;
+}
+
+.dateCntl{
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 2px;
+  border-color: #ccc;
+  border-style: none none solid none;
+  width: 15%;
+  transform: translateX(1.0em);
+  transition: all .5s;
+  padding: 5px;
+  font-size: 25px!important;
+  font-family: Roboto, sans-serif!important;
+  color: #4e4e4e!important;
+
+}
+
+input::-webkit-datetime-edit-day-field:focus,
+input::-webkit-datetime-edit-month-field:focus,
+input::-webkit-datetime-edit-year-field:focus {
+    background-color: rgb(208, 223, 92);
+    color: #4e4e4e!important;
+    outline: none;
+}
+
+.errorWindow,.errorID,.errorTimeOfOccurence,.errorElapsedTime{
+  box-shadow: none;
+  background-color: red;
+  font-size: 25px!important;
+  font-family: Roboto, sans-serif!important;
+  color: rgb(208, 223, 92);
+}
+
+.errorWindow{
+  position: absolute;
+  top: 75%;
+  left:30%;
+  width: 500px;
+}
+
+.rowHover{
+  background-color: #4e4e4e!important;
+  color: rgb(208, 223, 92);
+}
+
+.rowClick{
+  color: #4e4e4e!important;
+  background-color: rgb(208, 223, 92);
+}

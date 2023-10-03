@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="main.css">
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <script src="./gauge.min.js"></script>
+  <script src="./Chart.min.js"></script>
+  <script src="./renderer.js"></script>
+
+
+
+
+  <title>Endurance Test Equipment --Execute Test</title>
+</head>
+
+
+<body onload="rnHideDivsOnLoad();rnGetTestParams();">
+  <img src="img/logo.png" align="top" alt="Tekno logo" class="logo">
+  <h1>Endurance Test Equipment</h1>
+  <!-- Left Divs-->
+  <div id="divTestParams" class="rnTestParamsDiv">
+    <div id=divTestParamHeader" class="rnTestParamHeader"><b>Test Parameters:</b></div>
+    <div id="divTestParamVals" class="rnTestParamsDivVals">
+      <div id="divTestParamPressure" class="rnPgmdTestPressure">Test Pressure:</div>
+      <div id="divTestParamPgmdCycles" class="rnPgmdCycles">Programmed Cycles:</div>
+      <div id="divTestParamDegRtn" class="rnPgmdRtn" >Degree of Rotation:</div>
+      <div id="divTestParamPgmdTq" class="rnPgmdTq">Programmed Torque:</div>
+    </div>
+  </div>
+
+  <div id="divTestStatus" class="rnTestStatusDiv">
+    <div id=divTestStatuseader" class="rnTestStatusHeader"><b>Interval:</b></div>
+    <canvas id="cvsCycles" class="rnCVSCyclesGauge"></canvas>
+    <span id="cycles-value" class="rnSpanCycles"></span>
+    <div id="divTestCycles" class="rnDivTestCyclDetails">
+      Current Cycle Time: 
+      <div id="divCurrCycTimeVal" class="rnDivCurrCycTime">
+        15s
+      </div>
+      Average Cycle Time:
+      <div id="divAvgCycTimeVal" class="rnDivAvgCycTime">
+        20s
+      </div>
+      Total Test Time:
+      <div id="divTotTestTimeVal" class="rnDivTotTestTime">
+        12:23:56
+      </div>
+    </div>
+  </div>
+
+  <div id="divSolenoidStatus" class="rnSolenoidStatDiv">
+    <div id=divSolStatHeader" class="rnSolStatHeader"><b>Components:</b></div>
+    <div id="divInletIsoVlvLbl" class="rnDivIsoVlvLbl">
+      Inlet Isolating Valve:
+    </div>
+    <div id="divInletIsoVlvStat" class="rnDivIsoValvStat"></div>
+    <div id="divOtletVentVlvLbl" class="rnDivOtltVlvLbl">
+    Inlet Venting Valve:
+    </div>
+    <div id="divOtletIsoVlvStat" class="rnDivOtltValvStat"></div>
+    <div id="divXhuastVlvLbl" class="rnDivXhaustVlvLbl">
+    Outlet Exhaust Valve:
+    </div>
+    <div id="divXhaustVlvStat" class="rnDivXhaustValvStat"></div>
+  </div>
+
+  <div id="divTestStage" class="rnTestStageDiv">
+    <div id=divTestStageHeader" class="rnTestStageHeader"><b>Cycle Status:</b></div>
+    <div id="divTestStageContents" class="rnTestStatusContents"></div>
+  </div>
+  
+  
+  <!-- Center Divs-->
+  <div id="divOutletPressureGauge" class="rnOutletPrGgDiv">
+    <canvas id="cvsOutletPr" class="rnCVSoutletGauge"></canvas>
+    <span id="gaugeOutlet-value" class="rnSpanOutletGauge"></span>
+  </div>
+  <div id="divInletPressureGauge" class="rnInletPrGgDiv">
+    <canvas id="cvsInletPr" class="rnCVSInletGauge"></canvas>
+    <span id="gaugeInlet-value" class="rnSpanInletGauge"></span>
+  </div>
+  <div id="divTorqueGauge" class="rnTorqueGgDiv">
+    <canvas id="cvsGrTq" class="rnCVSTorqueGauge"></canvas>
+    <span id="gaugeTorque-value" class="rnSpanTorqueGauge"></span>
+
+  </div>
+
+  <!-- Right Divs-->
+  <div id="divInletPressureGraph" class="rnInletPrGraphDiv">
+    <canvas id="cvInletPressureGraph" class="rnInletPrGraphCV">
+    </canvas>
+  </div>
+  <div id="divOutletPressureGraph" class="rnOutletPrGraphDiv">
+    <canvas id="cvOutletPressureGraph" class="rnOutletPrGraphCV">
+  </div>
+  <div id="divTorqueGraph" class="rnTqGraphDiv">
+    <canvas id="cvTorqueGraph" class="rnTorqueGraphCV">
+  </div>
+
+  <div id="divBtnStart" class="rnBtnStart" onclick="rnStartAction()">
+    Start Test
+  </div>
+
+  <div id="divBtnPause" class="rnBtnPause" onclick="rnShowPauseOptions()">
+    Pause Test
+  </div>
+
+  <div id="divBtnStop" class="rnBtnStop" onclick="rnTakeStopAction()">
+    Stop Test
+  </div>
+
+  <div id="divBtnResumeNow" class="rnBtnResumeNow" onclick="rnTakeResumeNowAction()">
+    Resume Now
+  </div>
+
+  <div id="divBtnResumeLater" class="rnBtnResumeLater" onclick="rnTakeResumeLaterAction()">
+    Resume Later
+  </div>
+
+  <div id="divBtnBack" class="btnBack" onclick="closeTestWindow()">
+    Back
+  </div>
+</body>
+
+<div id="divErrorWin" class="errorWindow">
+  <div id="divErrorNameWin" class = "errorID">
+    Error:  
+  </div>
+  <div id="divTimeOfOccurence" class = "errorTimeOfOccurence">
+    Time of Occurence:
+  </div>
+  <div id ="divElapsedTime" class = "errorElapsedTime">
+    Elapsed Time:
+  </div>
+</div>
+
+</html>
+
+<script>
+var progLabels = [];
+var optsProgress = {
+    renderTicks: {
+      divisions: 1,
+      divWidth: 1.1,
+      divLength: 0.7,
+      //divColor: #333333,
+      subDivisions: 0,
+      subLength: 0.5,
+      subWidth: 0.6,
+      //subColor: #666666
+    },
+    
+    angle: -0.02, // The span of the gauge arc
+    lineWidth: 0.22, // The line thickness
+    radiusScale: 0.7, // Relative radius
+    limitMax: 'false',
+    pointer: {
+      length: 0.6, // // Relative to gauge radius
+      strokeWidth: 0.0, // The thickness
+      color: 'rgb(78, 78, 78)' // Fill color
+    },
+    staticLabels: {
+      font: "10px Roboto, sans-serif", // Specifies font
+      labels: progLabels, // Print labels at these values
+      color: "#4e4e4e", // Optional: Label text color
+      fractionDigits: 0 // Optional: Numerical precision. 0=round off.
+    },
+
+    limitMax: false, // If false, max value increases automatically if value > maxValue
+    limitMin: false, // If true, the min value of the gauge will be fixed
+    colorStart: '#4e4e4e', // Colors
+    colorStop: 'rgb(208, 223, 92)', // just experiment with them
+    strokeColor: '#4e4e4e', // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true, // High resolution support
+    percentColors: [
+      [0.0, "#a9d70b"],
+      [0.50, "#f9c802"],
+      [1.0, "#ff0000"]
+    ],
+  };
+
+    
+
+  //Torque Gauge
+  var opts = {
+    renderTicks: {
+      divisions: 6,
+      divWidth: 1.1,
+      divLength: 0.7,
+      //divColor: #333333,
+      subDivisions: 5,
+      subLength: 0.5,
+      subWidth: 0.6,
+      //subColor: #666666
+    },
+    angle: -0.01, // The span of the gauge arc
+    lineWidth: 0.22, // The line thickness
+    radiusScale: 0.7, // Relative radius
+    pointer: {
+      length: 0.6, // // Relative to gauge radius
+      strokeWidth: 0.035, // The thickness
+      color: 'rgb(78, 78, 78)' // Fill color
+    },
+    staticLabels: {
+      font: "18px Roboto, sans-serif", // Specifies font
+      labels: [0, 10, 20, 30, 40, 50, 60], // Print labels at these values
+      color: "#4e4e4e", // Optional: Label text color
+      fractionDigits: 0 // Optional: Numerical precision. 0=round off.
+    },
+
+    limitMax: false, // If false, max value increases automatically if value > maxValue
+    limitMin: false, // If true, the min value of the gauge will be fixed
+    colorStart: '#4e4e4e', // Colors
+    colorStop: 'rgb(208, 223, 92)', // just experiment with them
+    strokeColor: '#4e4e4e', // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true, // High resolution support
+    percentColors: [
+      [0.0, "#a9d70b"],
+      [0.50, "#f9c802"],
+      [1.0, "#ff0000"]
+    ],
+  };
+
+  var targetTorque = document.getElementById('cvsGrTq'); // your canvas element
+  var gaugeTorque = new Gauge(targetTorque).setOptions(opts); // create sexy gauge!
+  gaugeTorque.maxValue = 60; // set max gauge value
+  gaugeTorque.setMinValue(0); // Prefer setter over gauge.minValue = 0
+  gaugeTorque.animationSpeed = 48; // set animation speed (32 is default value)
+  //gaugeTorque.set(22.5); // set actual value
+
+  /*Refer: https://github.com/bernii/gauge.js/issues/4#issuecomment-7761988*/
+  var textRendererTorque = new TextRenderer(document.getElementById('gaugeTorque-value'))
+  textRendererTorque.render = function (gaugeTorque) {
+    this.el.innerHTML = "Torque: " + (gaugeTorque.displayedValue).toFixed(1) + "N-m";
+  };
+  gaugeTorque.setTextField(textRendererTorque);
+
+
+  //Inlet Gauge
+  var optsInlet = {
+    renderTicks: {
+      divisions: 6,
+      divWidth: 1.1,
+      divLength: 0.7,
+      //divColor: #333333,
+      subDivisions: 5,
+      subLength: 0.5,
+      subWidth: 0.6,
+      //subColor: #666666
+    },
+    angle: -0.02, // The span of the gauge arc
+    lineWidth: 0.22, // The line thickness
+    radiusScale: 0.75, // Relative radius
+    pointer: {
+      length: 0.6, // // Relative to gauge radius
+      strokeWidth: 0.035, // The thickness
+      color: 'rgb(78, 78, 78)' // Fill color
+    },
+    staticLabels: {
+      font: "15px Roboto, sans-serif", // Specifies font
+      labels: [0, 100, 200, 300, 400, 500, 600], // Print labels at these values
+      color: "#4e4e4e", // Optional: Label text color
+      fractionDigits: 0 // Optional: Numerical precision. 0=round off.
+    },
+    limitMax: false, // If false, max value increases automatically if value > maxValue
+    limitMin: false, // If true, the min value of the gauge will be fixed
+    colorStart: '#4e4e4e', // Colors
+    colorStop: 'rgb(208, 223, 92)', // just experiment with them
+    strokeColor: '#4e4e4e', // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true, // High resolution support
+
+  };
+  var targetInlet = document.getElementById('cvsInletPr'); // your canvas element
+  var gaugeInlet = new Gauge(targetInlet).setOptions(optsInlet); // create sexy gauge!
+  gaugeInlet.maxValue = 600; // set max gauge value
+  gaugeInlet.setMinValue(0); // Prefer setter over gauge.minValue = 0
+  gaugeInlet.animationSpeed = 48; // set animation speed (32 is default value)
+  //gaugeInlet.set(22.5); // set actual value
+
+  /*Refer: https://github.com/bernii/gauge.js/issues/4#issuecomment-7761988*/
+  var textRendererInlet = new TextRenderer(document.getElementById('gaugeInlet-value'))
+  textRendererInlet.render = function (gaugeInlet) {
+    this.el.innerHTML = "Inlet Pressure: " + (gaugeInlet.displayedValue).toFixed(0) + "bar";
+  };
+  gaugeInlet.setTextField(textRendererInlet);
+
+
+  //Outlet Gauge
+  var optsOutlet = {
+    renderTicks: {
+      divisions: 6,
+      divWidth: 1.1,
+      divLength: 0.7,
+      //divColor: #333333,
+      subDivisions: 5,
+      subLength: 0.5,
+      subWidth: 0.6,
+      //subColor: #666666
+    },
+    angle: -0.02, // The span of the gauge arc
+    lineWidth: 0.22, // The line thickness
+    radiusScale: 0.95, // Relative radius
+    pointer: {
+      length: 0.6, // // Relative to gauge radius
+      strokeWidth: 0.035, // The thickness
+      color: 'rgb(78, 78, 78)' // Fill color
+    },
+    staticLabels: {
+      font: "18px Roboto, sans-serif", // Specifies font  
+      labels: [0, 100, 200, 300, 400, 500, 600], // Print labels at these values
+      color: "#4e4e4e", // Optional: Label text color
+      fractionDigits: 0 // Optional: Numerical precision. 0=round off.
+    },
+    limitMax: false, // If false, max value increases automatically if value > maxValue
+    limitMin: false, // If true, the min value of the gauge will be fixed
+    colorStart: '#4e4e4e', // Colors
+    colorStop: 'rgb(208, 223, 92)', // just experiment with them
+    strokeColor: '#4e4e4e', // to see which ones work best for you
+    generateGradient: true,
+    highDpiSupport: true, // High resolution support
+
+  };
+  var targetOutlet = document.getElementById('cvsOutletPr'); // your canvas element
+  var gaugeOutlet = new Gauge(targetOutlet).setOptions(optsOutlet); // create sexy gauge!
+  gaugeOutlet.maxValue = 600; // set max gauge value
+  gaugeOutlet.setMinValue(0); // Prefer setter over gauge.minValue = 0
+  gaugeOutlet.animationSpeed = 48; // set animation speed (32 is default value)
+  //gaugeOutlet.set(600); // set actual value
+
+
+  /*Refer: https://github.com/bernii/gauge.js/issues/4#issuecomment-7761988*/
+  var textRendererOutlet = new TextRenderer(document.getElementById('gaugeOutlet-value'))
+  textRendererOutlet.render = function (gaugeOutlet) {
+    this.el.innerHTML = "Outlet Pressure: " + (gaugeOutlet.displayedValue).toFixed(0) + "bar";
+  };
+  gaugeOutlet.setTextField(textRendererOutlet);
+
+
+  /*Graph logic*/
+  const ctxInletPrGraph = document.getElementById('cvInletPressureGraph').getContext('2d');
+  const ctxOutletPrGraph = document.getElementById('cvOutletPressureGraph').getContext('2d');
+  const ctxTorqueGraph = document.getElementById('cvTorqueGraph').getContext('2d');
+
+
+
+  var chartOpts = {};
+  /*const InletPrChart = new Chart(ctxInletPrGraph,chartOpts);*/
+
+  var GrInletconfig = {
+    type: 'line',
+    data: {
+      labels: [],//[0,1,2,3,4,5,6,7],
+      datasets: [{
+        label: "Inlet Pressure (bars)",
+        data: [],//[0,10,20,30,40,50,60,70],
+        borderColor: 'rgb(78, 78, 78)',
+        fill: false,
+        pointRadius: 0,
+        lineTension: 0
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      responsive: true,
+      hover: {
+        mode: 'label'
+      },
+      scales: {
+        xAxis: {
+          display: true,
+          title: 'Time (Seconds)',
+          ticks: {
+            color: 'rgb(78, 78, 78)',
+          },
+          grid: {
+            color: 'rgb(208, 223, 92)',
+          },
+
+        },
+        yAxis: {
+          beginAtZero: true,
+          display: true,
+          title: 'Inlet Pressure',
+          ticks: {
+            color: 'rgb(78, 78, 78)',
+          },
+          grid: {
+            color: 'rgb(208, 223, 92)',
+          },
+
+        },
+      },
+      title: {
+        display: true,
+        text: 'Inlet Pressure'
+      }
+    }
+  };
+  var GrOutletconfig = {
+    type: 'line',
+    font: '15px Trebuchet MS',
+    data: {
+      labels: [],//[0,1,2,3,4,5,6,7],
+      datasets: [{
+        label: "Outlet Pressure (bars)",
+        data: [],//[0,10,20,30,40,50,60,70],
+        borderColor: 'rgb(78, 78, 78)',
+        fill: false,
+        pointRadius: 0,
+        lineTension: 0
+
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      responsive: true,
+      hover: {
+        mode: 'label'
+      },
+      scales: {
+
+        xAxis: {
+          display: true,
+          title: 'Time (Seconds)',
+          ticks: {
+            color: 'rgb(78, 78, 78)',
+          },
+          grid: {
+            color: 'rgb(208, 223, 92)',
+          },
+
+        },
+        yAxis: {
+          beginAtZero: true,
+          display: true,
+          title: 'Outlet Pressure',
+          ticks: {
+            color: 'rgb(78, 78, 78)',
+          },
+          grid: {
+            color: 'rgb(208, 223, 92)',
+          },
+
+        }
+      },
+      title: {
+        display: true,
+        text: 'Outlet Pressure'
+
+      }
+    }
+  };
+  var GrTqconfig = {
+    type: 'line',
+    data: {
+      labels: [],//[0,1,2,3,4,5,6,7],
+      datasets: [{
+        label: "Torque (N-m)",
+        color: "rgb(78, 78, 78)",
+        data: [],//[0, 1, 2, 3, 4, 5,10,100],
+        borderColor: 'rgb(78, 78, 78)',
+        fill: false,
+        pointRadius: 0,
+        lineTension: 0,
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      responsive: true,
+      hover: {
+        mode: 'label'
+      },
+      scales: {
+        xAxis: {
+          display: true,
+          title: 'Time (Seconds)',
+          ticks: {
+            color: 'rgb(78, 78, 78)',
+          },
+          grid: {
+            color: 'rgb(208, 223, 92)',
+            /*Need to find a method to change this colour to Tekno scheme */
+          },
+
+        },
+        yAxis: {
+          beginAtZero: true,
+          display: true,
+          title: 'Torque',
+          ticks: {
+            color: 'rgb(78, 78, 78)',
+            /*Need to find a method to change this colour to Tekno scheme */
+          },
+          grid: {
+            color: 'rgb(208, 223, 92)',
+            /*Need to find a method to change this colour to Tekno scheme */
+          },
+        }
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Chart Title',
+          }
+        }
+      }
+    }
+  };
+  const InletPrChart = new Chart(ctxInletPrGraph, GrInletconfig);
+  const OutletPrChart = new Chart(ctxOutletPrGraph, GrOutletconfig);
+  const TorqueChart = new Chart(ctxTorqueGraph, GrTqconfig);  
+
+
+  const ErrTimeOfOccurence = document.getElementById("divTimeOfOccurence");
+  const ErrElapsedTime = document.getElementById("divElapsedTime");
+  const ErrName = document.getElementById("divErrorNameWin");
+</script>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="main.css">
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <script src="./renderer.js">
+  </script>
+
+  <title>Endurance Test Equipment</title>
+</head>
+
+<body>
+  <img src="img/logo.png" align="top" alt="Tekno logo" class="logo">
+  <img src="img/BlueValve.png" align="right" alt="Tekno BlueValve">
+  <h1>Endurance Test Equipment</h1>
+
+  <div id="divBtnAction">
+    <div id="divLblFreshTest" onclick="conductFreshTest()" onmouseover="unhideDiv('divFreshTestDesc')" onmouseout ="hideDiv('divFreshTestDesc')" class="DivFreshTest">
+      <label id="LblIdFreshTest"  class="smallLabel">Conduct Fresh Test</label>
+    </div>
+    <div id="divLblPreviousTest" onclick="conductPreviousTest()" onmouseover="unhideDiv('divPrevTestDesc')" onmouseout ="hideDiv('divPrevTestDesc')" class="DivPreviousTest">
+      <label id="LblIdPreviousTest"  class="smallLabel">Conduct Previous Test</label>
+    </div>
+    <div id="divLblGenRpt" onclick="generateTestReport()" onmouseover="unhideDiv('divGenRptDesc')" onmouseout ="hideDiv('divGenRptDesc')" class="DivGenRpt">
+      <label id="LblIdGenTestRpt"  class="smallLabel">Generate Test Report</label>
+    </div>
+    <div id="divLblModifyTestSetting" onclick="modifyTestSettings()" onmouseover="unhideDiv('divModifySettingDesc')" onmouseout ="hideDiv('divModifySettingDesc')"  class="DivModSetting">
+      <label id="LblIdModTestSetting"  class="smallLabel">Modify Test Settings</label>
+    </div>
+  </div>
+
+  
+  <div id="divFreshTestDesc" class = "divFreshTestLblHide">
+    <h2>Conduct a Fresh Test</h2>
+    A test where you begin by entering the test parameters and start a completely new test.
+  </div>
+
+  <div id="divPrevTestDesc" class = "divPrevTestLblHide">
+    <h2>Run a test that was paused earlier.</h2>
+    A test which was being conducted and was paused for whatever reason can be resumed.
+  </div>
+
+  <div id="divGenRptDesc" class = "divGenRptLblHide">
+    <h2>Generate Test Reports</h2>
+    Excel reports can be generated for a test that has been conducted earlier.
+  </div>
+
+  <div id="divModifySettingDesc" class = "divLblModSettingLblHide">
+    <h2>Modify Test Settings</h2>
+    To modify/view/reset the test settings that will allow to change the test sequence delays and motor operation speed  
+  </div>
+
+
+  
+  <div id="divBtnBack" onclick="closeApplication()" class="btnBack">
+    Close Application
+  </div>
+
+</body>
+</html>

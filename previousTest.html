@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="main.css">
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <script src="./renderer.js"></script>
+  <script>
+
+
+  </script>
+
+  <title>Endurance Test Equipment</title>
+</head>
+
+<body onload="prevTstGetIncompTests()">
+  <img src="img/logo.png" align="top" alt="Tekno logo" class="logo">
+  <img src="img/BlueValve.png" align="right" alt="Tekno BlueValve">
+  <h1>Endurance Test Equipment</h1>
+
+  <div id="divptTbl" class="ptDivTbl" >
+    
+  <table id="tblPrevTests" class="ptTblPrevTest">
+    <caption>List of Incomplete Tests</caption>
+    <thead>
+    <tr id="tblHeaderRow" class="ptTblHeaderRow">
+      <th id="tblHeaderDate" class="ptTblHeaderDate">Date</th>
+      <th id="tblHeaderName" class="ptTableHeaderTstName">Test Name</th>
+      <th id="tblHeaderCond" class="ptTableHeaderTstCond">Test Conductor</th>
+    </tr>
+  </thead>
+    <tbody>
+    <!--
+    <tr>
+      <td class="ptTblDataDate">10/03/2022</td>
+      <td class="ptTblDataName">CNG2233</td>
+      <td class="ptTblDataCond">row 1, col 3</td>
+    </tr>
+    
+    <tr>
+      <td class="ptTblDataDate">11/03/2022</td>
+      <td class="ptTblDataName">row 2, col 2</td>
+      <td class="ptTblDataCond">row 2, col 3</td>
+    </tr>
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>    
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>    
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>    
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>    
+    <tr>
+      <td class="ptTblDataDate">12/03/2022</td>
+      <td class="ptTblDataName">row 3, col 2</td>
+      <td class="ptTblDataCond">row 3, col 3</td>
+    </tr>    
+    -->
+    
+  </tbody>
+  </table>
+</div>
+
+
+  <div id="divMarkAsComplete" class="ptBtnMarkAsComplete" onclick="markTestAsComplete()">
+    Mark Test as Complete
+  </div>
+
+  <div id="divResumeSelectedTest" class="ptBtnResumeSelectedTest" onclick="resumeSelectedTest()">
+    Resume Selected Test
+  </div>
+
+  <div id="divTestSelected" class="ptSelectedTest">
+    Selected Test:
+    <div id="divPr" class="ptptSelectedTestItems"></div>
+    <div id="divTq" class="ptptSelectedTestItems"></div>
+    <div id="divMaxTq" class="ptptSelectedTestItems"></div>
+    <div id="divcycls" class="ptptSelectedTestItems"></div>
+  </div>
+
+  <div id="divBtnBack" class="btnBack" onclick="closePreviousTest()">
+    Back
+  </div>
+</body>
+
+<script>
+ 
+</script>
+</html>

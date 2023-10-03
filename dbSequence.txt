@@ -1,0 +1,9 @@
+dbGetRecords(rTestID) ---> dbGetNumberOfRecordsOfParticularTest(rTestID) --> 
+
+
+//Proposed Scheme
+dbGetMaxCycleCompleted(rTestID, callback)
+dbGetTestParameters(rTestID, rMaxExecutedCycles, callback)
+XLwriteTestParameters(rTestID,rMaxExecutedCycles,rJsonTstParams,callback)
+
+

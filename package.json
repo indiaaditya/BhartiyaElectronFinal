@@ -1,0 +1,26 @@
+{
+  "name": "endurance",
+  "version": "1.0.0",
+  "description": "Electron Application for Endurance Test",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Aditya Ayachit",
+  "license": "SEE LICENSE IN license.txt",
+  "engines": {
+    "npm": ">=8.1.2",
+    "node": ">=16.13.2"
+  },
+  "devDependencies": {
+    "electron": "^22.0.3"
+  },
+  "dependencies": {
+    "exceljs": "^4.3.0",
+    "modbus-serial": "^8.0.9",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "serialport": "^11.0.1",
+    "xlsx": "^0.18.5"
+  }
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="main.css">
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <script src="./renderer.js">
+   
+  </script>
+
+  <title>Endurance Test Equipment</title>
+</head>
+
+<body onload="hideDivsOnLoad()">
+  <img src="img/logo.png" align="top" alt="Tekno logo" class="logo">
+  <img src="img/BlueValve.png" align="right" alt="Tekno BlueValve">
+  <h1>Endurance Test Equipment</h1>
+  <!-- We are using Node.js <span id="node-version"></span>, 
+    Chromium <span id="chrome-version"></span>,
+    and Electron <span id="electron-version"  </span>></span>-->
+
+  <div class="form-group">
+
+    <div id="divIDTestPr">
+      <input class="form-control" type="number" id="ipTestPressure" min="10" max="450"
+        placeholder="Test Pressure, min: 10 bar, max: 640 bar">
+      <label for="ipTestPressure" class="form-label">Test Pressure (bars)</label>
+      <button id="btnAccPressure" class="buttonAcceptParam" onclick="acceptPressure()">Accept</button>
+    </div>
+
+    <div id="divIDPgmdCycles">
+      <input class="form-control2" type="number" id="ipPgmdCycles" min="1" max="10000"
+        placeholder="Programmed Cycles, min: 1, max: 10000">
+      <label for="ipPgmdCycles" class="form-label">Programmed Cycles</label>
+      <button id="btnAccCycles" class="buttonAcceptParam" onclick="acceptPgmdCycles()">Accept</button>
+    </div>
+
+    <div id="divIDDegreeOfRtn">
+      <input class="form-control2" type="number" id="ipDegreeOfRotation" min="5" max="1440"
+        placeholder="Degree of Rotation, min: 5, max: 1440">
+      <label for="ipDegreeOfRotation" class="form-label">Degree of Rotation (degrees)</label>
+      <button id="btnAccRtn" class="buttonAcceptRotation" onclick="acceptDegreeOfRtn()">Accept</button>
+    </div>
+
+    <div id="divIDPgmdTq">
+      <input class="form-control2" type="number" id="ipPgmdTq" min="1.5" max="50" step="0.5"
+        placeholder="Programmed Torque, min: 1.5N-m, max: 50N-m">
+      <label for="ipPgmdTq" class="form-label">Programmed Torque (N-m)</label>
+      <button id="btnAccTq" class="buttonAcceptTorque" onclick="acceptTorque()">Accept</button>
+    </div>
+
+    <div id="divIDMaxTq" >
+      <input class="form-control2" type="number" id="ipMaximumTq" min="1.5" max="50" step="0.5"
+        placeholder="Maximum Torque, Greater than Min. tq and max: 50N-m">
+      <label for="ipMaximumTq" class="form-label">Maximum Torque (N-m)</label>
+      <button id="btnAccMaxTq" class="buttonAcceptTorque" onclick="acceptMaxTorque()">Accept</button>
+    </div>
+
+    <div id="divIDTestName">
+      <input class="form-control2" type="text" id="ipTestName" placeholder="Name of the test. Max 50 chars">
+      <label for="ipTestName" class="form-label">Test Name</label>
+      <button id="btnAccTestName" class="buttonAcceptTorque" onclick="acceptTestName()">Accept</button>
+    </div>
+
+    <div id="divIDTestConductor">
+      <input class="form-control2" type="text" id="ipTestConductor" placeholder="Test Conductor Name. Max 50 chars">
+      <label for="ipTestConductor" class="form-label">Test Conductor</label>
+      <button id="btnAccTestCond" class="buttonAcceptTorque" onclick="acceptTestConductor()">Accept</button>
+    </div>
+
+  </div>
+  </div>
+
+  <div id="divTestParamWrapper">
+    <div id="divLblTestPr" onclick="editTestPressure()" class="DivTestPressure">
+      <label id="LblIdTestPr"  class="smallLabel"></label>
+    </div>
+    <div id="divLblPgmdCycles" onclick="editPgmdCycles()" class="DivPgmdCycle">
+      <label id="LblIdPgmdCycles"  class="smallLabel"></label>
+    </div>
+    <div id="divLblDegreeOfRtn" onclick="editPgmdDegOfRtn()" class="DivDegreeOfRtn">
+      <label id="LblIdDegreeOfRtn"  class="smallLabel"></label>
+    </div>
+    <div id="divLblPgmdTq" onclick="editPgmdTq()" class="DivTorque">
+      <label id="LblIdPgmdTq"  class="smallLabel"></label>
+    </div>
+    <div id="divLblMaxTq" onclick="editPgmdMaxTq()" class="DivMaxTorque">
+      <label id="LblIdMaxTq"  class="smallLabel"></label>
+    </div>
+    <div id="divLblTestName" onclick="editPgmdTestName()" class="DivTestName">
+      <label id="LblIdTestName"  class="smallLabel"></label>
+    </div>
+    <div id="divLblTestConductor" onclick="editPgmdTestConductor()" class="DivTestConductor">
+      <label id="LblIdTestConductor"  class="smallLabel"></label>
+    </div>
+  </div>
+
+  <div id="divTestPrDesc">
+    <h2>Test Pressure:</h2>
+    Minimum: 10 bar
+    Maximum: 450 bar
+    The test will pause if the pressure falls below 90% of the programmed Test Pressure.
+  </div>
+
+  <div id="divPgmdCyclesDesc">
+    <h2>Programmed Cycles:</h2>
+    Minimum: 1
+    Maximum: 20,000
+  </div>
+
+  <div id="divPgmdDegOfRtnDesc">
+    <h2>Degree of Rotation:</h2>
+    Minimum: 10⁰
+    Maximum: 1440⁰
+  </div>
+
+  <div id="divPgmdTqDesc">
+    <h2>Programmed Torque:</h2>
+    Minimum: 2.5 N-m
+    Maximum: 40 N-m
+  </div>
+
+  <div id="divMaxPgmdTqDesc">
+    <h2>Maximum Programmed Torque:</h2>
+    Minimum: Atleast the programmed torque value
+    Maximum: 40 N-m
+    This comes in picture when the the programmed torque fails to seal the valve.
+    The torque is incremented in 5% increments till the maximum torque value
+  </div>
+
+  <div id="divTestNameDesc">
+    <h2>Test Name:</h2>
+    A string parameter. Atleast 1 character and utmost 12 character long.
+    Test name need not be unique.
+    It is used for selection of test for report generation.
+  </div>
+
+  <div id="divTestCondDesc">
+    <h2>Test Conductor:</h2>
+    A string parameter. Atleast 1 character and utmost 12 character long.
+    The name of the person who conducted the test.
+    It is used for selection of test for report generation.
+  </div>
+
+  <div id="divEditTestParams">
+    <h2>Start or Edit</h2>
+    Verify the test parameters. If they seem correct, you can start the test by clicking "Start Test Button".
+    If you want to edit any or all the test parameters, click on the specific item to edit
+  </div>
+
+  <div id="divBtnSubmit" class="btnSubmit" onclick="startTest()">
+    Start Test
+  </div>
+
+  <div id="divBtnBack" class="btnBack" onclick="closeTestParamWindow()">
+    Back
+  </div>
+
+
+
+  <div id="divRngTestPressure" class="slidecontainer">
+    <input type="range" min="10" max="450" value="50" class="slider" id="pressureRange">
+  </div>
+  <div id="divRngPgmdCycles" class="slidecontainer">
+    <input type="range" min="1" max="20000" value="2000" class="slider" id="cyclesRange">
+  </div>
+  <div id="divRngDegreeOfRotation" class="slidecontainer">
+    <input type="range" min="10" max="1440" value="360" class="slider" id="rtnRange">
+  </div>
+  <div id="divRngPgmdTq" class="slidecontainer">
+    <input type="range" min="1.5" max="45" value="7.5" class="slider" id="tqRange">
+  </div>
+  <div id="divRngMaxTq" class="slidecontainer">
+    <input type="range" max="45" class="slider" id="maxTqRange">
+  </div>
+</body>
+
+<script>
+ document.getElementById("pressureRange").oninput = function () {
+    document.getElementById("ipTestPressure").value = document.getElementById("pressureRange").value;
+  }
+
+  document.getElementById("ipTestPressure").oninput = function () {
+    document.getElementById("pressureRange").value = document.getElementById("ipTestPressure").value;
+  }
+
+  document.getElementById("cyclesRange").oninput = function () {
+    document.getElementById("ipPgmdCycles").value = document.getElementById("cyclesRange").value;
+  }
+
+  document.getElementById("ipPgmdCycles").oninput = function () {
+    document.getElementById("cyclesRange").value = document.getElementById("ipPgmdCycles").value;
+  }
+
+  document.getElementById("rtnRange").oninput = function () {
+    document.getElementById("ipDegreeOfRotation").value = document.getElementById("rtnRange").value;
+  }
+  document.getElementById("ipDegreeOfRotation").oninput = function () {
+    document.getElementById("rtnRange").value = document.getElementById("ipDegreeOfRotation").value;
+  }
+
+  document.getElementById("ipPgmdTq").oninput = function () {
+    document.getElementById("tqRange").value = document.getElementById("ipPgmdTq").value;
+  }
+  document.getElementById("tqRange").oninput = function () {
+    document.getElementById("ipPgmdTq").value = document.getElementById("tqRange").value;
+  }
+
+  document.getElementById("maxTqRange").oninput = function () {
+    document.getElementById("ipMaximumTq").value = document.getElementById("maxTqRange").value;
+  }
+  document.getElementById("ipMaximumTq").oninput = function () {
+    document.getElementById("maxTqRange").value = document.getElementById("ipMaximumTq").value;
+  }
+</script>
+
+</html>

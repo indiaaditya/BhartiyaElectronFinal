@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="main.css">
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+  <script src="./renderer.js"></script>
+  <script>
+
+
+  </script>
+
+  <title>Endurance Test Equipment</title>
+</head>
+
+<body>
+  <img src="img/logo.png" align="top" alt="Tekno logo" class="logo">
+  <img src="img/BlueValve.png" align="right" alt="Tekno BlueValve">
+  <h1>Endurance Test Equipment</h1>
+
+  <!--
+    Closed Channel Charged Outlet Pressure Monitor Interval ==> CCCOPMI
+    Closed Channel Dischared Outler Pressure Monitor Interval ==> CCDOPMI
+    Open Channel Pressure Monitor Interval ==> OCPMI
+  -->
+  <div id="divMotorSpeed" class="tsMotorSpeed">
+    <div id="divSpeedHeader" class="tsMotorSpeedHeader">
+      <B>Motor Test Speed (rpm)</B>
+    </div>
+    
+    <div id="divSpeedHeaderInput" class="tsSpeedHeaderInput">
+      <input class="form-control" type="number" id="inputMotorSpeed" min="10" max="30" value="20" readonly>
+    </div>
+    <div id="divRngSpeed" class="slidecontainer">
+      <input type="range" min="10" max="30" value="20" class="slider" id="rngMotorSpeed">
+    </div>
+  </div>
+
+  <div id="divCCCOPMI" class="tsCCCOPMI">
+    <div id="divCCCOPMIHeader" class="tsCCCOPMIHeader">
+      <B>Closed Channel Charged Outlet Pressure Monitor Interval (time in seconds)</B>
+    </div>
+    <div id="divCCCOPMIInput" class="tsCCCOPMIInput">
+      <input class="form-control" type="number" id="inputCCCOPMI" min="1" max="10" value="6" readonly>
+    </div>
+    <div id="divRngCCCOPMI" class="slidecontainer">
+      <input type="range" min="1" max="10" value="6" class="slider" id="rngCCCOPMI">
+    </div>
+  </div>
+
+  <div id="divCCDOPMI" class="tsCCDOPMI">
+    <div id="divCCDOPMIHeader" class="tsCCDOPMIHeader">
+      <B>Closed Channel Dischared Outlet Pressure Monitor Interval (time in seconds)</B>
+    </div>
+    <div id="divCCDOPMIInput" class="tsCCDOPMIInput">
+      <input class="form-control" type="number" id="inputCCDOPMI" min="1" max="10" value="6" readonly>
+    </div>
+    <div id="divRngCCDOPMI" class="slidecontainer">
+      <input type="range" min="1" max="10" value="6" class="slider" id="rngCCDOPMI">
+    </div>
+  </div>
+
+  
+  <div id="divOCPMI" class="tsOCPMI">
+    <div id="divOCPMIHeader" class="tsOCPMIHeader">
+      <B>Open Channel Pressure Monitor Interval (time in seconds)</B>
+    </div>
+     <div id="divOCPMIInput" class="tsOCPMIInput">
+      <input class="form-control" type="number" id="inputOCPMI" min="1" max="10" value="6" readonly>
+    </div>
+    <div id="divRngOCPMI" class="slidecontainer">
+      <input type="range" min="1" max="10" value="6" class="slider" id="rngOCPMI">
+    </div>
+  </div>
+
+
+  <div id="divModify" class="btnSubmit" onclick="tsModifyTestSettingValues()">
+    Submit
+  </div>
+  <div id="divRestoreToDefault" class="rnBtnPause" onclick="tsRestoreTestSettingValues()">
+    Restore Defaults
+  </div>
+  <div id="divBtnBack" class="btnBack" onclick="closeTestSetting()">
+    Back
+  </div>
+</body>
+
+<script>
+  document.getElementById("divRngSpeed").oninput = function () {
+     document.getElementById("inputMotorSpeed").value = document.getElementById("rngMotorSpeed").value;
+   }
+   document.getElementById("divRngCCCOPMI").oninput = function () {
+     document.getElementById("inputCCCOPMI").value = document.getElementById("rngCCCOPMI").value;
+   }
+   document.getElementById("divRngCCDOPMI").oninput = function () {
+     document.getElementById("inputCCDOPMI").value = document.getElementById("rngCCDOPMI").value;
+   }
+   document.getElementById("divRngOCPMI").oninput = function () {
+     document.getElementById("inputOCPMI").value = document.getElementById("rngOCPMI").value;
+   }
+
+   function restoreDefaults(){
+    document.getElementById("rngMotorSpeed").value = 15;
+    document.getElementById("inputMotorSpeed").value = 15;
+
+    document.getElementById("rngCCCOPMI").value = 6;
+    document.getElementById("inputCCCOPMI").value = 6;
+
+    document.getElementById("rngCCDOPMI").value = 6;
+    document.getElementById("inputCCDOPMI").value = 6;
+
+    document.getElementById("rngOCPMI").value = 6;
+    document.getElementById("inputOCPMI").value = 6;
+
+
+
+   }
+</script>
+</html>
