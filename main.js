@@ -116,6 +116,10 @@ const ETTEST_PAUSE_BEGIN = 420;
 const ETTEST_RESUME_BEGIN = 430;
 const ETTEST_AWAIT_RESUME_COMPLETE = 440;
 const ETTEST_TAKE_STOP_TEST_ACTION = 450;
+const ETTEST_NON_RECOVERABLE_ERROR_ACTION_BEGIN = 460;
+const ETTEST_NON_RECOVERABLE_ERROR_ACTION_DELAY = 470;
+const ETTEST_NON_RECOVERABLE_ERROR_ACTION_END = 480;
+
 
 
 //Constant declarations
@@ -193,6 +197,7 @@ var ET_ERROR_DISPLAYED_FLAG = 0;
 var ET_TorqueIncrementPercentage = 0;
 
 const TORQUE_CORRECTION_FACTOR = 0.4;
+const MAX_TQ_CAL_ATTEMPTS = 20;
 
 const Q0 = 0x01;
 const Q1 = 0x02;
@@ -1158,20 +1163,6 @@ function XLWriteRecord(rRow, rColumn, rSecond, rCycle, rOtltPr) {
 	XLWriteCell(rRow, rColumn, rOtltPr);
 }
 
-/*
-testParams.Name = 'Trial11';
-testParams.Cond = 'Me';
-testParams.startDate = '2022-09-16 20:34:00';
-testParams.servicePressure = '250';
-testParams.openingDegree = '360';
-testParams.closingTorque = '7.5';
-testParams.maxTorque = '9';
-testParams.pgmdCycles = '1000';
-testParams.motorRPM = '15';
-testParams.CCCOPMI = '6';
-testParams.CCDOPMI = '6';
-testParams.OCPMI = '6';
-*/
 
 
 function XLwriteTestParameters(rTestID, rMaxExecutedCycles, rJsonTstParams, callback) {
@@ -1260,7 +1251,7 @@ var ET_ExcessOutletPressureCntr = 0;
 var ET_ValveOpenErrCntr = 0;
 var ET_ValveCloseErrCntr = 0;
 var ET_EmergencyStopCntr = 0;
-var ET_ServoMechErrorCntr = 0;
+//var ET_ServoMechErrorCntr = 0;
 var ET_JigLeakageCntr = 0;
 var ET_SeatLeakageCntr = 0;
 var ET_JigSpindleCntr = 0;
@@ -1280,6 +1271,7 @@ const RESUME_INTERVAL = 20;
 
 var EnduranceTestExecuteCurrrentStat = ETTEST_UNKNOWN;
 var ETSet_UsedClosingTorque = 0;
+var ETSet_Pressure = 0;
 var vTqMaxTolerance = 0;
 var vCycleInProgress = 0;
 var vDlyCntr = 0;
@@ -1415,10 +1407,11 @@ function ExecuteEnduranceTest() {
 			vDlyCntr = 0; //Reset Delay
 			vET_Return_Status = ETTEST_PREPARE_TEST_APPLY_INLET;
 			vET_Tq_InitialCalDone = 0;
-			ET_ServoMechErrorCntr = 0;
+			//ET_ServoMechErrorCntr = 0;
 			vTqCalCntr = 0;
 			strET_Test_Status = "Torque Calibration In Progress";
 			vET_TestStatusUpdateStausFlag = 1;
+			vServoDelayCntr = 0;
 			EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_CAL;
 			console.log('SAS 55:' + uiSrvoActualStatus);
 
@@ -1430,16 +1423,18 @@ function ExecuteEnduranceTest() {
 			vlRstRlyDesired = 0;
 			vCycleInProgress = 0;
 
-			if(vTqCalCntr >= 15){
+			if(vTqCalCntr >= MAX_TQ_CAL_ATTEMPTS){
 				cycleParam.errorCode = ET_ERROR_CALIBRATION_FAILURE;
+				//ToDo: Non recoverable error action here
 				break;
 			}
 			console.log('SAS:' + uiSrvoActualStatus);
-			if ((uiSrvoActualStatus === SERVO_CMD_STAT_UNKNOWN) /*|| (uiSrvoActualStatus === SERVO_CMD_STAT_COMPLETED)*/) {
+			if (uiSrvoActualStatus == SERVO_CMD_STAT_UNKNOWN ) {
 				//First Check if this is the first calibration or Torque Modification cal!
 				if (vET_Tq_InitialCalDone == 0) { //This indicates that this is the first cycle or the cycle is resumed from a cold start!
 					set20PercentLessTqForCal();
-				} else { //This indicates that torque Modification is in progress!
+				} 
+				else { //This indicates that torque Modification is in progress!
 					if (vTqPeakNegativeVal > ETSet_UsedClosingTorque) {
 						increaseTqForCal();
 					}
@@ -1464,13 +1459,24 @@ function ExecuteEnduranceTest() {
 					EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_AWAIT_COMPLETE;
 				}
 			}		
+			else{
+				vServoDelayCntr++;
+				if (vServoDelayCntr > 100){
+					//ToDo: Non recoverable error action here
+					//Servo mechanism CLosing error.
+				}
+
+			}
 			break;
 
 		case ETTEST_PREPARE_TEST_AWAIT_COMPLETE:
 			vServoDelayCntr++;
-			if (vServoDelayCntr > 100)
+			if (vServoDelayCntr > 100){
 				EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_CAL;
+				vServoDelayCntr = 0;
+			}
 			if (uiSrvoActualStatus == SERVO_CMD_STAT_COMPLETED_TQ) {
+				vServoDelayCntr = 0;
 				EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_MONITOR;
 			}
 			break;
@@ -1481,12 +1487,17 @@ function ExecuteEnduranceTest() {
 			vCycleInProgress = 0;
 			//console.log('SCS:'+ uiSrvoActualStatus);
 			if (uiSrvoActualStatus == SERVO_CMD_STAT_UNKNOWN) {
-				//console.log('AAA');
 				bMonitorPeakTq = 0;
 				SetDesiredTqAndDegOfRtn(0, 0, 1, 0, 0);
+				vServoDelayCntr = 0;
 				EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_OPEN_VALVE;
 			} else {
 				vServoDelayCntr++;
+				if (vServoDelayCntr > 100)
+				{
+					//ToDo: Non recoverable error action here
+					//Servo mechanism error.
+				}	
 				//console.log('DLCNTR:'+ vServoDelayCntr);
 			}
 		
@@ -1506,11 +1517,18 @@ function ExecuteEnduranceTest() {
 				vTimeoutCntrAwaitCmdAccept = 0;
 				EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_AWAIT_OPEN_CMD_ACCEPT;
 			}
+			else{
+				vServoDelayCntr++;
+				if(vServoDelayCntr > 30){
+					//ToDo: Non recoverable error action here
+					//Servo mechanism error.
+				}
+			}
 			break;
 
 		case ETTEST_PREPARE_TEST_TORQUE_AWAIT_OPEN_CMD_ACCEPT:
 			vTimeoutCntrAwaitCmdAccept++;
-			if(vTimeoutCntrAwaitCmdAccept > 10)
+			if(vTimeoutCntrAwaitCmdAccept > OPEN_CLOSE_ACCEPTANCE_MAX_TIME)
 			EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_OPEN_VALVE;
 			if (uiSrvoActualStatus != SERVO_CMD_STAT_UNKNOWN)
 				EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_OPEN_VALVE_MONITOR;
@@ -1587,9 +1605,6 @@ function ExecuteEnduranceTest() {
 			vlOutletExhaustDesired = 0;
 			vlCntrRlyDesired = 0;
 			vlRstRlyDesired = 0;
-			//alert("Insufficient Inlet Pressure Detected. Please Take Remedial Action");
-			//show insufficient inlet Pressure interval
-			//ET_InsufficientInletPressureCntr++; //Show half of this value to indicate low pressure interval
 			vReturnVal = ValidatePressure(ET_Inlet_Pressure, ETSet_Pressure, 5, 10);
 
 			//*****************************************************************************************************************************
@@ -1601,6 +1616,7 @@ function ExecuteEnduranceTest() {
 				vReturnVal = PRESSURE_OK;
 			}*/
 			if ((vReturnVal === PRESSURE_OK) || (vReturnVal === PRESSURE_MORE)) {
+				vServoDelayCntr = 0;
 				EnduranceTestExecuteCurrrentStat = ETTEST_EXEC_CLOSE_VALVE_BEGIN;
 				cycleParam.errorCode = 0;
 			} else { //indicates that there is insufficient pressure!
@@ -1640,14 +1656,8 @@ function ExecuteEnduranceTest() {
 				EnduranceTestExecuteCurrrentStat = ETTEST_EXEC_VALVE_CLOSE_STD_ACTION;
 			} else {
 				cycleParam.errorCode = ET_ERROR_SERVO_MECHANISM;
-				ET_ServoMechErrorCntr++;
+				//ET_ServoMechErrorCntr++;
 			}
-
-			/*
-			if(commFailFlag == 1){
-				EnduranceTestExecuteCurrrentStat = ;
-			}
-			*/
 			break;
 
 
@@ -1724,7 +1734,7 @@ function ExecuteEnduranceTest() {
 					vTqMeasurementSkipCntr++;
 					if (vTqMeasurementSkipCntr > 3) {
 						cycleParam.errorCode = ET_ERROR_SERVO_MECHANISM;
-						ET_ServoMechErrorCntr++;
+						//ET_ServoMechErrorCntr++;
 					}
 					else {
 						EnduranceTestExecuteCurrrentStat = ETTEST_EXEC_VALVE_CLOSE_STD_ACTION;
@@ -1932,11 +1942,12 @@ function ExecuteEnduranceTest() {
 				if(cycleParam.errorCode != ET_ERROR_SEAT_LEAKAGE)
 					ET_SeatLeakageCntr = 0;
 				cycleParam.errorCode = ET_ERROR_SEAT_LEAKAGE;
-					ET_SeatLeakageCntr++;
+				ET_SeatLeakageCntr++;
 				//alert("Torque has been increased by 50% of the set Torque and yet leakage is detected.\n Possible Reasons: \n 1. Incorrect value of Torque was fed in. \n 2. Test Piece Failure");
 			} else {
 				vTqCalCntr = 0;
 				vTqMaxTolerance = (ETSet_UsedClosingTorque * 3) / 100;
+				vServoDelayCntr = 0;
 				EnduranceTestExecuteCurrrentStat = ETTEST_PREPARE_TEST_TORQUE_CAL;
 				console.log('Sending back for calibration.....');
 				vET_Return_Status = ETTEST_EXEC_VALVE_OPEN_STD_ACTION;
@@ -2257,6 +2268,29 @@ function ExecuteEnduranceTest() {
 				EnduranceTestExecuteCurrrentStat = vET_Return_Status;
 			}
 			break;
+
+
+			case ETTEST_NON_RECOVERABLE_ERROR_ACTION_BEGIN:
+				vlInletIsolatingDesired = 0;
+				vlIntletVentingDesired = 1;
+				vlOutletExhaustDesired = 1;
+				vlCntrRlyDesired = 0;
+				vlRstRlyDesired = 0;
+				strET_Test_Status = "Shutting down."
+				vDlyCntr = 0;
+				EnduranceTestExecuteCurrrentStat = ETTEST_NON_RECOVERABLE_ERROR_ACTION_DELAY;
+				break;
+			case ETTEST_NON_RECOVERABLE_ERROR_ACTION_DELAY:
+				if(vDlyCntr > 10){
+					vlInletIsolatingDesired = 0;
+					vlIntletVentingDesired = 0;
+					vlOutletExhaustDesired = 0;
+					vlCntrRlyDesired = 0;
+					vlRstRlyDesired = 0;
+				}
+				break;
+			case ETTEST_NON_RECOVERABLE_ERROR_ACTION_END:
+				break;
 			
 		default:
 			vCycleInProgress = 0;
@@ -2338,27 +2372,7 @@ async function torqueRead() {
 	
 }
 
-/*async function InletPressureRead() {
-	let lclPr = 0;
-	let lclErrFlag = 0;
-	try {
-		mbusClient.setID(1);
-		let val = await mbusClient.readInputRegisters(0, 1);
-		let lclPr = val.data[0];
-		if ((lclPr & 0x8000) > 0)
-			lclPr = lclPr - 0x10000;
-		//lclPr = lclTq/100; 
-		consolelog('InPr:' + lclPr);
-	} catch (e) {
-		console.log('Inlet Pressure Read Error');
-		lclErrFlag = 1;
-	}
-	if(lclErrFlag == 0){
-		cycleParam.inletPressure = lclPr/10;
-		ET_Inlet_Pressure = cycleParam.inletPressure; //Variable being filled to maintain the previous code sanctity.
-	}
 
-}*/
 
 async function InletPressureRead() {
 	let lclPr = 0;
@@ -2586,37 +2600,7 @@ var uiSrvoActualStatus = 0;
 var strData = '';
 var serverDataUpdateFlag = 0;
 var connectionStatus = NOT_CONNECTED;
-/*
-const client = net.connect({
-	port: 27015
-}, () => { //use same port of server  
-	//consolelog('connected to server!');
-	connectionStatus = CONNECTED;
-});
 
-
-client.on('data', (data) => {
-	//consolelog(data.toString());
-	strData = data.toString();
-	let retString = strData.slice(0, 3);
-
-	if ((retString == HEADER_EXPECTED_ACTION_GET_TQ_POSITION)) {
-		GetActualTqAndPosn();
-		serverDataUpdateFlag = 1;
-		if (servoMotionDesiredFlag == 1) {
-			servoMotionDesiredFlag = 0;
-			client.write(strServoCmdWrite);
-		} else {
-			dummyWrite();
-		}
-	}
-});
-
-client.on('end', () => {
-	//consolelog('disconnected from server');
-	connectionStatus = NOT_CONNECTED;
-});
-*/
 var strlenXtractBuff = 0;
 var bufferFlag = 0;
 var rcvDataLen = 0;
@@ -2656,61 +2640,7 @@ port.on('data', function (data) {//1
 });//\1
 
 
-/*
-port.on('data', function (data) {
 
-	//console.log('D: '+ data.toString());
-	if(data == '#'){
-		rcvDataLen = 0;
-		bufferFlag = 1;
-		let j = 0;
-		for(j = 0; j < 50; j++){
-			rcvData[j] = '';
-			
-		}
-
-	}
-	else{
-		if(bufferFlag == 1){
-			if(data != '$'){
-				rcvData[rcvDataLen] = data;
-				rcvDataLen++;
-			}
-			else{
-
-
-
-				bufferFlag == 0;
-				let k = 0;
-				for(k = 0; k < 50; k++){
-					extractedData[k] = '';
-				}
-				for(k = 0; k < rcvDataLen; k++){
-					extractedData[k] = rcvData[k];
-				}	
-				
-				let i = 0;
-				for(i = 0; i < 50; i++)
-					rcvData[i] = '';
-				extractedDataLen = rcvDataLen; 
-				console.log("X:" +  extractedData);
-				extractedString = extractedData.join(""); 
-				console.log(extractedString);
-				let retString = extractedString.slice(0, 3);
-				if ((retString == HEADER_EXPECTED_ACTION_GET_TQ_POSITION)) {
-					strData = extractedString;
-				 	GetActualTqAndPosn();
-				 }
-			}
-
-		}
-
-
-	}
-
-
-})
-*/
 
 var servoMotionDesiredFlag = 0;
 var strServoCmdWrite = '';
@@ -2750,13 +2680,6 @@ function SetDesiredTqAndDegOfRtn(uirBuffDesiredDegreeOfRtn, frBuffDesiredTq, uir
 		diffLen--;
 	}
 
-	//console.log('DegS:' + lclStrDegOfRtn);
-	//console.log('TqS:' + lclStrTq);
-	//console.log('RPMS:' + lclStrRPM);
-
-	// strDataToWrite += ',' + uirBuffDesiredDegreeOfRtn.toString() + ',' + frBuffDesiredTq.toString() + ',' + uirBuffDesiredRPM.toString() + ',' + uirBuffDesiredDirectionOfRtn.toString() + ',' + uirBuffDesiredStatus.toString() + ',';
-	// strServoCmdWrite = strDataToWrite;
-	// console.log(strDataToWrite);
 	servoMotionDesiredFlag = 1;	//This variable is currently unused but could be used later so not removed!
 	
 	let lclValveOpen = 'OOO';
@@ -2939,7 +2862,7 @@ function increaseTqForCal() {
 	//If program came to this point it indicates that calibration failed!
 	//console.log(vTqPeakNegativeVal);
 	cycleParam.errorCode = ET_ERROR_CALIBRATION_FAILURE;
-	//alert("Too large a difference! No point in making adjustments!");
+	
 	 
 	 
 }
