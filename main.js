@@ -2235,7 +2235,6 @@ function ExecuteEnduranceTest() {
 			if(vDlyCntr > 5){
 				vDlyCntr = 0;
 				stopTestAction();
-				cycleParam.errorCode = 0;
 				vTestStartFlag = START_FRESH_TEST;
 			}
 			break;
@@ -2640,10 +2639,7 @@ port.on('data', function (data) {//1
 });//\1
 
 
-
-
 var servoMotionDesiredFlag = 0;
-var strServoCmdWrite = '';
 
 function SetDesiredTqAndDegOfRtn(uirBuffDesiredDegreeOfRtn, frBuffDesiredTq, uirBuffDesiredStatus, uirBuffDesiredDirectionOfRtn, uirBuffDesiredRPM) {
 	//consolelog('SetDesiredTqAndDegOfRtn');
@@ -2704,15 +2700,6 @@ function SetDesiredTqAndDegOfRtn(uirBuffDesiredDegreeOfRtn, frBuffDesiredTq, uir
 	console.log(strDataToWrite);
 	port.write(strDataToWrite)
 	//client.write('CmdSent:' + strDataToWrite);
-}
-
-function dummyWrite() {
-	//consolelog('dummyWrite');
-	let strDataToWrite = '';
-	strDataToWrite = HEADER_DUMMY_READ;
-	strDataToWrite += ',' + 0 + ',' + 0 + ',' + 0 + ',' + 0 + ',' + 0 + ',';
-	//consolelog(strDataToWrite);
-	client.write(strDataToWrite);
 }
 
 var Dirn = ACW;

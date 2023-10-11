@@ -391,21 +391,7 @@ function acceptTorque() {
 
     document.getElementById("ipMaximumTq").value = programmedParams.torque;
     elementSetFocus("ipMaximumTq");
-    /*} else {
-      console.log('DDDD');
-      document.getElementById("LblIdPgmdTq").innerHTML = "Programmed Torque: " + programmedParams.torque + " N-m";
-      hideDiv("divIDPgmdTq");
-      hideDiv("divPgmdTqDesc");
-      console.log('Pgmd Tq:'+ programmedParams.torque);
-      document.getElementById("ipMaximumTq").min = programmedParams.torque;
-      document.getElementById("ipMaximumTq").value = programmedParams.torque;
-      document.getElementById("divPgmdTqDesc").classList.remove("translateDivPgmdTq");
-      unhideDiv("divBtnSubmit");
-      unhideDiv("divEditTestParams");
-      document.getElementById("divTestCondDesc").classList.add("translateDivTestCond");
-      unhideDiv("divRngMaxTq");
-    }
-    */
+   
 
   }
 }
@@ -855,36 +841,13 @@ function rptAcceptEndDate() {
   let lclStrEndDate = '';
   lclStrEndDate = document.getElementById('ipDateEnd').value;
   if(lclStrEndDate.length > 0){
-    /*
-    console.log('rptAcceptEndDate');
-    hideReportDivs();
-    unhideDiv('divrptTbl');
-    */
    repReqDateJSON.endDate = lclStrEndDate;
    window.electronAPI.testRptListReqByDate(repReqDateJSON);
 
   }
 }
 
-/*
-function setProgressChartValue(rVal){
-   var textRendererProgress = new TextRenderer(document.getElementById('cycles-value'))
-   textRendererProgress.render = function (gaugeProgress) {
-     this.el.innerHTML =   (rVal).toFixed(0);
-   };
-   gaugeProgress.setTextField(textRendererProgress);
- 
-}
 
-function setTorqueChartValue(rVal){
-  var textRendererTorque = new TextRenderer(document.getElementById('gaugeTorque-value'))
-  textRendererTorque.render = function (gaugeTorque) {
-    this.el.innerHTML = "Torque: " + (gaugeTorque.displayedValue).toFixed(1) + "N-m";
-  };
-  gaugeTorque.setTextField(textRendererTorque);
-
-}
-*/
 var gaugeProgress;
 window.electronAPI.onGetTestParams((_event, value) => {
   console.log('xReceived Test Params:' + value);
@@ -1179,6 +1142,7 @@ function rnShowHideError(errCode) {
         break;
       case NO_ERROR_DETECTED:
         StrErrTxt = "Error: ";
+        vErrorElapsedInterval =  0;
         vErrorShownFlag = ERROR_ACTION_TAKEN;
         switch (errCode) {
           case ET_ERROR_INSUFFICIENT_INLET_PRESSURE:
